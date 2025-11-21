@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 
 const Contact = () => {
   return (
@@ -23,8 +23,8 @@ const Contact = () => {
                   <Mail className="w-6 h-6 text-primary mt-1" />
                   <div>
                     <h3 className="font-semibold mb-1">Email</h3>
-                    <a href="mailto:info@varnathfinancial.com" className="text-muted-foreground hover:text-primary transition-colors">
-                      info@varnathfinancial.com
+                    <a href="mailto:varnathfinancialadvisors@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
+                      varnathfinancialadvisors@gmail.com
                     </a>
                   </div>
                 </div>
@@ -33,31 +33,9 @@ const Contact = () => {
                   <Phone className="w-6 h-6 text-primary mt-1" />
                   <div>
                     <h3 className="font-semibold mb-1">Phone</h3>
-                    <a href="tel:+919876543210" className="text-muted-foreground hover:text-primary transition-colors">
-                      +91 98765 43210
+                    <a href="tel:+918688032553" className="text-muted-foreground hover:text-primary transition-colors">
+                      +91 86880 32553
                     </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <MapPin className="w-6 h-6 text-primary mt-1" />
-                  <div>
-                    <h3 className="font-semibold mb-1">Office</h3>
-                    <p className="text-muted-foreground">
-                      123 Business District<br />
-                      Mumbai, Maharashtra 400001
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <Clock className="w-6 h-6 text-primary mt-1" />
-                  <div>
-                    <h3 className="font-semibold mb-1">Business Hours</h3>
-                    <p className="text-muted-foreground">
-                      Monday - Friday: 9:00 AM - 6:00 PM<br />
-                      Saturday: 10:00 AM - 2:00 PM
-                    </p>
                   </div>
                 </div>
               </div>
