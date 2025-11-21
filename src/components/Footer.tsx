@@ -36,9 +36,8 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold mb-4">Contact Info</h3>
             <ul className="space-y-2 text-sm">
-              <li className="opacity-80">+91 98765 43210</li>
-              <li className="opacity-80">info@varnathfinancial.com</li>
-              <li className="opacity-80">Mumbai, Maharashtra</li>
+              <li className="opacity-80">+91 86880 32553</li>
+              <li className="opacity-80">varnathfinancialadvisors@gmail.com</li>
             </ul>
           </div>
         </div>
