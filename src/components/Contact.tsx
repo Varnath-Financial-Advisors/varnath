@@ -1,14 +1,16 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Mail, Phone, Send } from "lucide-react";
+import { Mail, Phone, Send, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
@@ -22,6 +24,7 @@ type ContactFormData = z.infer<typeof contactSchema>;
 
 const Contact = () => {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const form = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
@@ -34,17 +37,33 @@ const Contact = () => {
     },
   });
 
-  const onSubmit = (data: ContactFormData) => {
-    // For now, we'll show a success message and open email client
-    const subject = encodeURIComponent(`Inquiry: ${data.service}`);
-    const body = encodeURIComponent(
-      `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\nService: ${data.service}\n\nMessage:\n${data.message}`
-    );
-    window.location.href = `mailto:varnathfinancialadvisors@gmail.com?subject=${subject}&body=${body}`;
+  const onSubmit = async (data: ContactFormData) => {
+    setIsSubmitting(true);
+    
+    const { error } = await supabase
+      .from('contact_submissions')
+      .insert({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        service: data.service,
+        message: data.message,
+      });
+    
+    setIsSubmitting(false);
+    
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to submit your message. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     toast({
-      title: "Message Prepared!",
-      description: "Your email client will open with your inquiry details.",
+      title: "Message Sent!",
+      description: "Thank you for reaching out. We'll get back to you soon.",
     });
     
     form.reset();
@@ -157,9 +176,13 @@ const Contact = () => {
                     )}
                   />
                   
-                  <Button type="submit" size="lg" className="w-full">
-                    <Send className="w-4 h-4 mr-2" />
-                    Send Message
+                  <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Send className="w-4 h-4 mr-2" />
+                    )}
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </Button>
                 </form>
               </Form>
