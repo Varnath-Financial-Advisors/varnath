@@ -10,7 +10,7 @@ const Navigation = () => {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/knowledge-base", label: "Knowledge Base" },
-    { href: "#services", label: "Services" },
+    { href: "/services", label: "Services" },
     { href: "#contact", label: "Contact" },
   ];
 
@@ -24,15 +24,25 @@ const Navigation = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-foreground hover:text-primary transition-colors font-medium"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.href.startsWith("#") ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="text-foreground hover:text-primary transition-colors font-medium"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="text-foreground hover:text-primary transition-colors font-medium"
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
             <Button variant="default" size="sm" asChild>
               <a href="#contact">Get Started</a>
             </Button>
@@ -51,16 +61,27 @@ const Navigation = () => {
         {/* Mobile Navigation */}
         {isOpen && (
           <div className="md:hidden pb-4 space-y-3">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="block text-foreground hover:text-primary transition-colors font-medium py-2"
-                onClick={() => setIsOpen(false)}
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.href.startsWith("#") ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="block text-foreground hover:text-primary transition-colors font-medium py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="block text-foreground hover:text-primary transition-colors font-medium py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
             <Button variant="default" size="sm" className="w-full" asChild>
               <a href="#contact">Get Started</a>
             </Button>
