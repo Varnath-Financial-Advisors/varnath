@@ -224,7 +224,7 @@ const Contact = () => {
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <span className="mr-2">✓</span>
-                    <span>15+ years of industry expertise</span>
+                    <span>5+ years of industry expertise</span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2">✓</span>
