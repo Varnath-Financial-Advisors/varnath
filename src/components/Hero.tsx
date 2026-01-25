@@ -26,8 +26,8 @@ const Hero = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
             {[
-              { label: "Years of Experience", value: "15+" },
-              { label: "Satisfied Clients", value: "500+" },
+              { label: "Years of Experience", value: "5+" },
+              { label: "Satisfied Clients", value: "50+" },
               { label: "Compliance Success Rate", value: "99.8%" },
             ].map((stat) => (
               <div key={stat.label} className="bg-card p-6 rounded-lg border border-border">
