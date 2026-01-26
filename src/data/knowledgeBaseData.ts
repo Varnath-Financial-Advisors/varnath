@@ -420,7 +420,7 @@ ITC is NOT available on:
 ### Key Annual Forms
 | Form | Purpose | Due Date |
 |------|---------|----------|
-| AOC-4 | Financial statements | 30 days from AGM |
+| AOC-4 | Financial statements | 31st October |
 | MGT-7/MGT-7A | Annual return | 60 days from AGM |
 | ADT-1 | Auditor appointment | 15 days from AGM |
 | DIR-3 KYC | Director KYC | 30th September |
@@ -479,7 +479,7 @@ Contains:
 |------|----------|
 | Board meeting for accounts | Before AGM |
 | AGM | Within 6 months of FY end |
-| AOC-4 filing | 30 days from AGM |
+| AOC-4 filing | 31st October |
 | MGT-7 filing | 60 days from AGM |
 | ADT-1 filing | 15 days from AGM |
 | DIR-3 KYC | By 30th September |
