@@ -84,31 +84,40 @@ const ArticleDetail = ({ article, categoryName, onBack }: ArticleDetailProps) =>
           <ReactMarkdown
             components={{
               table: ({ children }) => (
-                <div className="overflow-x-auto my-4">
-                  <table className="min-w-full border-collapse border border-border">
+                <div className="overflow-x-auto my-6 rounded-xl border border-border shadow-sm">
+                  <table className="min-w-full divide-y divide-border">
                     {children}
                   </table>
                 </div>
               ),
               thead: ({ children }) => (
-                <thead className="bg-muted">{children}</thead>
+                <thead className="bg-primary/10">{children}</thead>
+              ),
+              tr: ({ children }) => (
+                <tr className="border-b border-border last:border-0 hover:bg-muted/50 transition-colors">
+                  {children}
+                </tr>
               ),
               th: ({ children }) => (
-                <th className="border border-border px-4 py-2 text-left font-semibold">
+                <th className="px-4 py-3 text-left text-sm font-bold text-primary uppercase tracking-wider whitespace-nowrap">
                   {children}
                 </th>
               ),
               td: ({ children }) => (
-                <td className="border border-border px-4 py-2">{children}</td>
+                <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">
+                  <span className="inline-flex items-center">
+                    {children}
+                  </span>
+                </td>
               ),
               h2: ({ children }) => (
-                <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground">{children}</h2>
+                <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground border-b border-border pb-2">{children}</h2>
               ),
               h3: ({ children }) => (
-                <h3 className="text-xl font-semibold mt-6 mb-3 text-foreground">{children}</h3>
+                <h3 className="text-xl font-semibold mt-6 mb-3 text-primary">{children}</h3>
               ),
               p: ({ children }) => (
-                <p className="mb-4 text-muted-foreground">{children}</p>
+                <p className="mb-4 text-muted-foreground leading-relaxed">{children}</p>
               ),
               ul: ({ children }) => (
                 <ul className="list-disc pl-6 mb-4 space-y-2">{children}</ul>
@@ -117,7 +126,7 @@ const ArticleDetail = ({ article, categoryName, onBack }: ArticleDetailProps) =>
                 <ol className="list-decimal pl-6 mb-4 space-y-2">{children}</ol>
               ),
               li: ({ children }) => (
-                <li className="text-muted-foreground">{children}</li>
+                <li className="text-muted-foreground leading-relaxed">{children}</li>
               ),
               strong: ({ children }) => (
                 <strong className="font-semibold text-foreground">{children}</strong>
