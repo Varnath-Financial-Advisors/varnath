@@ -905,9 +905,10 @@ Pricing of transactions between associated enterprises to ensure they're at arm'
 ### October 2025
 - 15th: TCS Q2 return
 - 31st: TDS Q2 return
+- 31st: AOC-4 filing
 
 ### November 2025
-- 30th: AOC-4, MGT-7 (typically)
+- 30th: MGT-7 filing (typically)
 
 ### December 2025
 - 15th: Advance tax - 3rd installment
