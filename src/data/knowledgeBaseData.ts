@@ -31,36 +31,139 @@ export const taxLaws: Category[] = [
         id: "income-tax-slabs-2024",
         title: "Understanding Income Tax Slabs for FY 2024-25",
         summary: "Learn about the new and old tax regimes, applicable tax rates, and choose the best option for your income level.",
-        topics: ["Tax Slabs", "New Tax Regime", "Deductions under 80C"],
+        topics: ["Tax Slabs", "New Tax Regime", "Old Tax Regime", "Surcharge", "Rebate u/s 87A"],
         content: `
-## Income Tax Slabs for FY 2024-25
+## Income Tax Slabs for FY 2024-25 (AY 2025-26)
 
-The Indian income tax system offers two regimes for individual taxpayers:
+The Indian income tax system offers two regimes for individual taxpayers. The **New Tax Regime is the default** from FY 2023-24 onwards.
 
-### New Tax Regime (Default)
-| Income Range | Tax Rate |
-|--------------|----------|
-| Up to ₹3,00,000 | Nil |
-| ₹3,00,001 - ₹7,00,000 | 5% |
-| ₹7,00,001 - ₹10,00,000 | 10% |
-| ₹10,00,001 - ₹12,00,000 | 15% |
-| ₹12,00,001 - ₹15,00,000 | 20% |
-| Above ₹15,00,000 | 30% |
+---
 
-### Old Tax Regime
-| Income Range | Tax Rate |
-|--------------|----------|
-| Up to ₹2,50,000 | Nil |
-| ₹2,50,001 - ₹5,00,000 | 5% |
-| ₹5,00,001 - ₹10,00,000 | 20% |
-| Above ₹10,00,000 | 30% |
+## New Tax Regime (Default) - Section 115BAC
 
-### Key Differences
-- **New Regime**: Lower tax rates but limited deductions
-- **Old Regime**: Higher rates but allows deductions under 80C, 80D, HRA, etc.
+| Income Range | Tax Rate | Tax Amount (Max) |
+|--------------|----------|------------------|
+| Up to ₹3,00,000 | Nil | ₹0 |
+| ₹3,00,001 - ₹7,00,000 | 5% | ₹20,000 |
+| ₹7,00,001 - ₹10,00,000 | 10% | ₹30,000 |
+| ₹10,00,001 - ₹12,00,000 | 15% | ₹30,000 |
+| ₹12,00,001 - ₹15,00,000 | 20% | ₹60,000 |
+| Above ₹15,00,000 | 30% | As applicable |
 
-### Which One to Choose?
-Choose the **Old Regime** if your total deductions exceed ₹3-4 lakhs annually. Otherwise, the **New Regime** is generally more beneficial.
+### New Regime Benefits
+- **Standard Deduction**: ₹75,000 (increased from ₹50,000)
+- **Rebate u/s 87A**: Full tax rebate if income ≤ ₹7,00,000
+- **Family Pension Deduction**: ₹25,000 (increased from ₹15,000)
+
+---
+
+## Old Tax Regime (Optional)
+
+| Income Range | Tax Rate | Tax Amount (Max) |
+|--------------|----------|------------------|
+| Up to ₹2,50,000 | Nil | ₹0 |
+| ₹2,50,001 - ₹5,00,000 | 5% | ₹12,500 |
+| ₹5,00,001 - ₹10,00,000 | 20% | ₹1,00,000 |
+| Above ₹10,00,000 | 30% | As applicable |
+
+### Old Regime Deductions Available
+| Section | Deduction | Maximum Limit |
+|---------|-----------|---------------|
+| 80C | PPF, ELSS, LIC, etc. | ₹1,50,000 |
+| 80CCD(1B) | NPS Additional | ₹50,000 |
+| 80D | Health Insurance | ₹25,000 - ₹1,00,000 |
+| 80E | Education Loan Interest | No limit |
+| 80G | Donations | 50% - 100% |
+| 80TTA | Savings Interest | ₹10,000 |
+| 24(b) | Home Loan Interest | ₹2,00,000 |
+| HRA | House Rent Allowance | As per rules |
+
+---
+
+## Surcharge Rates (Both Regimes)
+
+| Total Income | Old Regime | New Regime |
+|--------------|------------|------------|
+| ₹50 Lakhs - ₹1 Cr | 10% | 10% |
+| ₹1 Cr - ₹2 Cr | 15% | 15% |
+| ₹2 Cr - ₹5 Cr | 25% | 25% |
+| Above ₹5 Cr | 37% | 25% (capped) |
+
+**Note**: Surcharge on New Regime is capped at 25% even for income above ₹5 Cr.
+
+---
+
+## Health & Education Cess
+
+| Component | Rate |
+|-----------|------|
+| Health & Education Cess | 4% on (Tax + Surcharge) |
+
+---
+
+## Senior Citizen Benefits
+
+| Category | Age | Basic Exemption (Old Regime) |
+|----------|-----|------------------------------|
+| Regular Individual | Below 60 | ₹2,50,000 |
+| Senior Citizen | 60 - 80 | ₹3,00,000 |
+| Super Senior Citizen | Above 80 | ₹5,00,000 |
+
+**Note**: In New Regime, basic exemption is ₹3,00,000 for all age groups.
+
+---
+
+## Tax Comparison: Old vs New Regime
+
+| Gross Income | New Regime Tax | Old Regime Tax* | Better Option |
+|--------------|----------------|-----------------|---------------|
+| ₹7,00,000 | ₹0 (Rebate) | ₹0 (with 80C) | Either |
+| ₹10,00,000 | ₹54,600 | ₹54,600 | Depends on deductions |
+| ₹12,00,000 | ₹83,200 | ₹93,600 | New Regime |
+| ₹15,00,000 | ₹1,45,600 | ₹1,56,000 | New Regime |
+| ₹20,00,000 | ₹2,49,600 | ₹2,49,600 | Depends on deductions |
+| ₹25,00,000 | ₹3,64,000 | ₹3,64,000 | Depends on deductions |
+
+*Old Regime tax calculated without any deductions. With deductions, Old Regime may be beneficial.
+
+---
+
+## When to Choose Which Regime?
+
+### Choose New Regime If:
+- Your total deductions are less than ₹3-4 lakhs
+- You prefer simplicity with fewer compliance requirements
+- You have income mainly from salary with standard deduction
+- Your income is ≤ ₹7 lakhs (full rebate available)
+
+### Choose Old Regime If:
+- Your total deductions exceed ₹4-5 lakhs annually
+- You have significant HRA claims
+- You have home loan interest deductions
+- You make substantial 80C, 80D investments
+
+---
+
+## Important Points to Remember
+
+| Point | Details |
+|-------|---------|
+| Default Regime | New Tax Regime (from FY 2023-24) |
+| Switch Option | Salaried: Every year; Business: Once in lifetime |
+| Form for Opting Out | Form 10-IEA (to choose Old Regime) |
+| Due Date for Form | Before filing ITR |
+| Rebate Limit (New) | Income up to ₹7,00,000 |
+| Rebate Limit (Old) | Income up to ₹5,00,000 |
+
+---
+
+## Quick Tax Calculator Formula
+
+**New Regime (Income > ₹15 Lakhs)**:
+\`Tax = ₹1,50,000 + 30% of (Income - ₹15,00,000) + 4% Cess\`
+
+**Old Regime (Income > ₹10 Lakhs)**:
+\`Tax = ₹1,12,500 + 30% of (Income - ₹10,00,000) + 4% Cess\`
         `,
         downloadable: {
           title: "Tax Regime Comparison Calculator",
