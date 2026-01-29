@@ -11,7 +11,6 @@ const Navigation = () => {
     { href: "/", label: "Home" },
     { href: "/knowledge-base", label: "Knowledge Base" },
     { href: "/services", label: "Services" },
-    { href: "#contact", label: "Contact" },
   ];
 
   return (
