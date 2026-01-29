@@ -84,52 +84,90 @@ const ArticleDetail = ({ article, categoryName, onBack }: ArticleDetailProps) =>
           <ReactMarkdown
             components={{
               table: ({ children }) => (
-                <div className="overflow-x-auto my-6 rounded-xl border border-border shadow-sm">
+                <div className="overflow-x-auto my-6 rounded-xl border-2 border-primary/20 shadow-md bg-card">
                   <table className="min-w-full divide-y divide-border">
                     {children}
                   </table>
                 </div>
               ),
               thead: ({ children }) => (
-                <thead className="bg-primary/10">{children}</thead>
+                <thead className="bg-primary text-primary-foreground">{children}</thead>
               ),
               tr: ({ children }) => (
-                <tr className="border-b border-border last:border-0 hover:bg-muted/50 transition-colors">
+                <tr className="border-b border-border last:border-0 hover:bg-primary/5 transition-colors even:bg-muted/30">
                   {children}
                 </tr>
               ),
               th: ({ children }) => (
-                <th className="px-4 py-3 text-left text-sm font-bold text-primary uppercase tracking-wider whitespace-nowrap">
+                <th className="px-4 py-3 text-left text-sm font-bold uppercase tracking-wider whitespace-nowrap">
                   {children}
                 </th>
               ),
-              td: ({ children }) => (
-                <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">
-                  <span className="inline-flex items-center">
-                    {children}
-                  </span>
-                </td>
-              ),
+              td: ({ children }) => {
+                const content = String(children);
+                // Highlight currency values
+                const isCurrency = /₹[\d,]+/.test(content);
+                // Highlight percentages
+                const isPercentage = /\d+%/.test(content);
+                // Highlight important keywords
+                const isImportant = /(Mandatory|Required|Nil|Exempt|No limit)/i.test(content);
+                
+                let className = "px-4 py-3 text-sm whitespace-nowrap";
+                if (isCurrency) {
+                  className += " font-semibold text-primary";
+                } else if (isPercentage) {
+                  className += " font-semibold text-accent-foreground bg-accent/20 rounded";
+                } else if (isImportant) {
+                  className += " font-medium text-primary";
+                } else {
+                  className += " text-foreground";
+                }
+                
+                return (
+                  <td className={className}>
+                    <span className="inline-flex items-center">
+                      {children}
+                    </span>
+                  </td>
+                );
+              },
               h2: ({ children }) => (
-                <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground border-b border-border pb-2">{children}</h2>
+                <h2 className="text-2xl font-bold mt-8 mb-4 text-foreground border-b-2 border-primary/30 pb-2">{children}</h2>
               ),
               h3: ({ children }) => (
-                <h3 className="text-xl font-semibold mt-6 mb-3 text-primary">{children}</h3>
+                <h3 className="text-xl font-semibold mt-6 mb-3 text-primary flex items-center gap-2">
+                  <span className="w-1 h-6 bg-primary rounded-full"></span>
+                  {children}
+                </h3>
               ),
               p: ({ children }) => (
                 <p className="mb-4 text-muted-foreground leading-relaxed">{children}</p>
               ),
               ul: ({ children }) => (
-                <ul className="list-disc pl-6 mb-4 space-y-2">{children}</ul>
+                <ul className="list-none pl-0 mb-4 space-y-2">{children}</ul>
               ),
               ol: ({ children }) => (
                 <ol className="list-decimal pl-6 mb-4 space-y-2">{children}</ol>
               ),
               li: ({ children }) => (
-                <li className="text-muted-foreground leading-relaxed">{children}</li>
+                <li className="text-muted-foreground leading-relaxed flex items-start gap-2">
+                  <span className="text-primary mt-1.5">•</span>
+                  <span>{children}</span>
+                </li>
               ),
               strong: ({ children }) => (
-                <strong className="font-semibold text-foreground">{children}</strong>
+                <strong className="font-semibold text-foreground bg-primary/10 px-1 rounded">{children}</strong>
+              ),
+              code: ({ children }) => (
+                <code className="bg-muted px-2 py-1 rounded text-sm font-mono text-primary">{children}</code>
+              ),
+              blockquote: ({ children }) => (
+                <blockquote className="border-l-4 border-primary pl-4 py-2 my-4 bg-primary/5 rounded-r-lg italic text-muted-foreground">
+                  {children}
+                </blockquote>
+              ),
+              hr: () => (
+                <hr className="my-8 border-t-2 border-primary/20" />
               ),
             }}
           >
