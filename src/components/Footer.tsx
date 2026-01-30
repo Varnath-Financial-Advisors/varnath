@@ -36,7 +36,10 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold mb-4">Contact Info</h3>
             <ul className="space-y-2 text-sm">
-              <li className="opacity-80">+91 86880 32553</li>
+              <li className="opacity-80">Pillar No. 215, Budvel Village,</li>
+              <li className="opacity-80">Rajendra Nagar Mandal,</li>
+              <li className="opacity-80">Hyderabad - 500030</li>
+              <li className="opacity-80 mt-3">+91 86880 32553</li>
               <li className="opacity-80">varnathfinancialadvisors@gmail.com</li>
             </ul>
           </div>
