@@ -1,13 +1,16 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import KnowledgeBase from "./pages/KnowledgeBase";
-import ServicesPage from "./pages/ServicesPage";
-import NotFound from "./pages/NotFound";
 import WhatsAppButton from "./components/WhatsAppButton";
+
+// Lazy load pages for code splitting
+const Index = lazy(() => import("./pages/Index"));
+const KnowledgeBase = lazy(() => import("./pages/KnowledgeBase"));
+const ServicesPage = lazy(() => import("./pages/ServicesPage"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
@@ -17,13 +20,15 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/knowledge-base" element={<KnowledgeBase />} />
-          <Route path="/services" element={<ServicesPage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/knowledge-base" element={<KnowledgeBase />} />
+            <Route path="/services" element={<ServicesPage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
         <WhatsAppButton />
       </BrowserRouter>
     </TooltipProvider>
