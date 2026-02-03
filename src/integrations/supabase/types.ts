@@ -70,6 +70,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_contact_submission_rate: { Args: never; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
