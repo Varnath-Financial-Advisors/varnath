@@ -1,7 +1,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Calculator, Building2, Users } from "lucide-react";
+import { FileText, Calculator, Building2, Users, ArrowRight } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Services = () => {
+  const { ref: sectionRef, isVisible } = useScrollAnimation({ threshold: 0.1 });
+
   const services = [
     {
       icon: <FileText className="w-10 h-10 text-primary" />,
@@ -50,9 +55,13 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-20 px-4 bg-accent">
+    <section id="services" className="py-20 px-4 bg-accent" ref={sectionRef}>
       <div className="container mx-auto">
-        <div className="text-center mb-16">
+        <div 
+          className={`text-center mb-16 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             Our Services
           </h2>
@@ -63,17 +72,29 @@ const Services = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow">
+            <Card 
+              key={index} 
+              className={`group hover:shadow-xl transition-all duration-500 border-2 border-transparent hover:border-primary/20 ${
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+              }`}
+              style={{ 
+                transitionDelay: isVisible ? `${150 + index * 100}ms` : "0ms"
+              }}
+            >
               <CardHeader>
-                <div className="mb-4">{service.icon}</div>
-                <CardTitle className="text-2xl mb-2">{service.title}</CardTitle>
+                <div className="mb-4 p-3 bg-primary/10 rounded-xl w-fit group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
+                  {service.icon}
+                </div>
+                <CardTitle className="text-2xl mb-2 group-hover:text-primary transition-colors">
+                  {service.title}
+                </CardTitle>
                 <CardDescription className="text-base">{service.description}</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
                   {service.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start">
-                      <span className="text-primary mr-2">•</span>
+                    <li key={idx} className="flex items-center">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary mr-3" />
                       <span className="text-muted-foreground">{feature}</span>
                     </li>
                   ))}
@@ -81,6 +102,20 @@ const Services = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        <div 
+          className={`text-center mt-12 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{ transitionDelay: isVisible ? "600ms" : "0ms" }}
+        >
+          <Button variant="outline" size="lg" className="group" asChild>
+            <Link to="/services">
+              View All Services 
+              <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </Button>
         </div>
       </div>
     </section>
