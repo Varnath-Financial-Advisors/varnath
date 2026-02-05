@@ -1,15 +1,14 @@
- import { useState, useMemo } from "react";
+ import { useState, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
- import { Calculator, IndianRupee, TrendingDown, ArrowRight, Building2, Heart, Briefcase, Home, GraduationCap, Landmark, ChevronDown, ChevronUp, Info, Users } from "lucide-react";
+ import { Calculator, TrendingDown, ArrowRight, Building2, Heart, Briefcase, Home, GraduationCap, Landmark, Info, Users } from "lucide-react";
  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
  import { Switch } from "@/components/ui/switch";
  import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
  import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
  import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
- import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
  
  interface TaxInputs {
    // Basic Details
@@ -87,7 +86,6 @@ const TaxCalculator = () => {
      npsEmployerContribution: "",
    });
  
-   const [showResults, setShowResults] = useState(false);
    const [activeTab, setActiveTab] = useState("income");
  
    const parseNumber = (value: string): number => parseFloat(value) || 0;
@@ -96,7 +94,7 @@ const TaxCalculator = () => {
      setInputs(prev => ({ ...prev, [field]: value }));
    };
  
-   const calculateHRAExemption = (): number => {
+   const calculateHRAExemption = useCallback((): number => {
      const basic = parseNumber(inputs.basicSalary);
      const hraReceived = parseNumber(inputs.hra);
      const rentPaid = parseNumber(inputs.actualRentPaid);
@@ -110,9 +108,9 @@ const TaxCalculator = () => {
      const exemption3 = Math.max(0, rentPaid - (basic * 0.1));
      
      return Math.min(exemption1, exemption2, exemption3);
-   };
+   }, [inputs.basicSalary, inputs.hra, inputs.actualRentPaid, inputs.isMetroCity]);
  
-   const calculateOldRegimeTax = (): TaxResult => {
+   const calculateOldRegimeTax = useCallback((): TaxResult => {
      const basic = parseNumber(inputs.basicSalary);
      const hra = parseNumber(inputs.hra);
      const specialAllowances = parseNumber(inputs.specialAllowances);
@@ -216,9 +214,9 @@ const TaxCalculator = () => {
        effectiveRate: grossIncome > 0 ? (totalTax / grossIncome) * 100 : 0,
        surcharge: Math.round(surcharge),
      };
-   };
+   }, [inputs, calculateHRAExemption]);
  
-   const calculateNewRegimeTax = (): TaxResult => {
+   const calculateNewRegimeTax = useCallback((): TaxResult => {
      const basic = parseNumber(inputs.basicSalary);
      const hra = parseNumber(inputs.hra);
      const specialAllowances = parseNumber(inputs.specialAllowances);
@@ -283,16 +281,39 @@ const TaxCalculator = () => {
        effectiveRate: grossIncome > 0 ? (totalTax / grossIncome) * 100 : 0,
        surcharge: Math.round(surcharge),
      };
-   };
+   }, [inputs]);
  
-   const oldRegimeResult = useMemo(() => calculateOldRegimeTax(), [inputs]);
-   const newRegimeResult = useMemo(() => calculateNewRegimeTax(), [inputs]);
+   const oldRegimeResult = useMemo(() => calculateOldRegimeTax(), [calculateOldRegimeTax]);
+   const newRegimeResult = useMemo(() => calculateNewRegimeTax(), [calculateNewRegimeTax]);
    
    const savings = Math.abs(oldRegimeResult.totalTax - newRegimeResult.totalTax);
    const betterRegime = oldRegimeResult.totalTax < newRegimeResult.totalTax ? "Old Regime" : "New Regime";
 
-   const handleCalculate = () => {
-     setShowResults(true);
+   const handleReset = () => {
+     setInputs({
+       ageGroup: "below60",
+       residentialStatus: "resident",
+       basicSalary: "",
+       hra: "",
+       specialAllowances: "",
+       lta: "",
+       otherIncome: "",
+       interestIncome: "",
+       rentalIncome: "",
+       isMetroCity: true,
+       actualRentPaid: "",
+       section80C: "",
+       section80CCD1B: "",
+       section80D_self: "",
+       section80D_parents: "",
+       section80E: "",
+       section80G: "",
+       section80TTA: "",
+       homeLoanInterest: "",
+       isPropertySelfOccupied: true,
+       professionalTax: "",
+       npsEmployerContribution: "",
+     });
   };
 
   const formatCurrency = (value: number) => {
@@ -697,13 +718,23 @@ const TaxCalculator = () => {
                      </TabsContent>
                    </Tabs>
  
-                   <div className="mt-8 flex justify-center">
+                   <div className="mt-8 flex justify-center gap-4">
                      <Button 
-                       onClick={handleCalculate}
+                       onClick={handleReset}
+                       variant="outline"
                        size="lg"
-                       className="px-12"
                      >
-                       Calculate Tax <ArrowRight className="w-4 h-4 ml-2" />
+                       Reset All
+                     </Button>
+                     <Button 
+                       onClick={() => {
+                         const element = document.getElementById('tax-results');
+                         element?.scrollIntoView({ behavior: 'smooth' });
+                       }}
+                       size="lg"
+                       className="px-8"
+                     >
+                       View Results <ArrowRight className="w-4 h-4 ml-2" />
                      </Button>
                    </div>
                  </CardContent>
@@ -711,7 +742,7 @@ const TaxCalculator = () => {
              </div>
  
              {/* Results Section */}
-             <div className="lg:col-span-1 space-y-4">
+             <div id="tax-results" className="lg:col-span-1 space-y-4">
                {/* Quick Summary */}
                <Card className="shadow-lg border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
                  <CardHeader className="pb-2">
