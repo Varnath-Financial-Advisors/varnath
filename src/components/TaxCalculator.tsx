@@ -88,7 +88,20 @@ const TaxCalculator = () => {
  
    const [activeTab, setActiveTab] = useState("income");
  
-   const parseNumber = (value: string): number => parseFloat(value) || 0;
+  const parseNumber = (value: string): number => {
+    if (!value || value === "") return 0;
+    // Remove any non-numeric characters except decimal point
+    const cleanValue = value.replace(/[^0-9.]/g, "");
+    return parseFloat(cleanValue) || 0;
+  };
+
+  const formatInputValue = (value: string): string => {
+    // Allow empty input
+    if (!value || value === "") return "";
+    // Remove non-numeric characters except decimal
+    const cleanValue = value.replace(/[^0-9.]/g, "");
+    return cleanValue;
+  };
  
    const updateInput = (field: keyof TaxInputs, value: string | boolean) => {
      setInputs(prev => ({ ...prev, [field]: value }));
@@ -364,17 +377,18 @@ const TaxCalculator = () => {
            </TooltipProvider>
          )}
        </div>
-       <div className="relative">
-         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">₹</span>
-         <Input
-           id={id}
-           type="number"
-           placeholder={placeholder}
-           value={value}
-           onChange={(e) => onChange(e.target.value)}
-           className="pl-7"
-         />
-       </div>
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">₹</span>
+          <Input
+            id={id}
+            type="text"
+            inputMode="numeric"
+            placeholder={placeholder}
+            value={value}
+            onChange={(e) => onChange(formatInputValue(e.target.value))}
+            className="pl-7"
+          />
+        </div>
      </div>
    );
  
