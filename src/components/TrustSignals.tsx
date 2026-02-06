@@ -3,14 +3,9 @@ import { Shield, Award, Users, Clock } from "lucide-react";
 const TrustSignals = () => {
   const signals = [
     {
-      icon: <Shield className="w-8 h-8" />,
-      title: "ISO Certified",
-      description: "Information security management"
-    },
-    {
       icon: <Award className="w-8 h-8" />,
-      title: "ICAI Member",
-      description: "Chartered Accountants of India"
+      title: "Expert CAs",
+      description: "Partnered with experienced Chartered Accounts for best services"
     },
     {
       icon: <Users className="w-8 h-8" />,
