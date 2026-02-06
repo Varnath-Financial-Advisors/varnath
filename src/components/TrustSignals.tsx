@@ -1,11 +1,16 @@
-import { Shield, Award, Users, Clock } from "lucide-react";
+import { Award, Users, Clock, BadgeCheck } from "lucide-react";
 
 const TrustSignals = () => {
   const signals = [
     {
       icon: <Award className="w-8 h-8" />,
       title: "Expert CAs",
-      description: "Partnered with experienced Chartered Accounts for best services"
+      description: "Partnered with experienced Chartered Accountants for best services"
+    },
+    {
+      icon: <BadgeCheck className="w-8 h-8" />,
+      title: "5+ Years Experience",
+      description: "Proven track record in financial services"
     },
     {
       icon: <Users className="w-8 h-8" />,
