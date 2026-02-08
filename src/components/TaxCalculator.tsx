@@ -54,11 +54,14 @@ interface TaxResult {
   chapter6Deductions: number;
   homeLoanDeduction: number;
   taxableIncome: number;
-  taxBeforeCess: number;
+  taxBeforeRebate: number;
+  rebate87A: number;
+  marginalRelief: number;
+  taxAfterRebate: number;
+  surcharge: number;
   cess: number;
   totalTax: number;
   effectiveRate: number;
-  surcharge: number;
   marginalRate: number;
   slabBreakdown: { slab: string; rate: string; tax: number }[];
 }
@@ -248,23 +251,46 @@ const TaxCalculator = () => {
       }
     }
     
-    // Rebate u/s 87A
-    let rebateApplied = false;
-    if (inputs.residentialStatus === "resident" && taxableIncome <= 500000) {
-      tax = Math.max(0, tax - 12500);
-      rebateApplied = true;
+    // Store tax before any rebate
+    const taxBeforeRebate = tax;
+    
+    // Rebate u/s 87A (Old Regime)
+    // For resident individuals with taxable income up to ₹5,00,000
+    // Rebate = Minimum of Tax Payable or ₹12,500
+    let rebate87A = 0;
+    let marginalRelief = 0;
+    
+    if (inputs.residentialStatus === "resident") {
+      if (taxableIncome <= 500000) {
+        // Full rebate up to ₹12,500
+        rebate87A = Math.min(tax, 12500);
+        tax = Math.max(0, tax - rebate87A);
+      } else if (taxableIncome > 500000 && taxableIncome <= 550000) {
+        // Marginal Relief: Tax payable should not exceed income above ₹5L
+        const incomeAboveThreshold = taxableIncome - 500000;
+        const normalTax = tax;
+        const taxAtThreshold = 12500; // Tax at ₹5L threshold in old regime
+        const marginalTax = Math.max(0, taxAtThreshold - 12500) + incomeAboveThreshold;
+        
+        if (normalTax > marginalTax) {
+          marginalRelief = normalTax - marginalTax;
+          tax = marginalTax;
+        }
+      }
     }
     
-    // Calculate Surcharge
+    const taxAfterRebate = tax;
+    
+    // Calculate Surcharge (applied after rebate)
     let surcharge = 0;
     if (taxableIncome > 5000000) {
-      if (taxableIncome <= 10000000) surcharge = tax * 0.10;
-      else if (taxableIncome <= 20000000) surcharge = tax * 0.15;
-      else if (taxableIncome <= 50000000) surcharge = tax * 0.25;
-      else surcharge = tax * 0.37;
+      if (taxableIncome <= 10000000) surcharge = taxAfterRebate * 0.10;
+      else if (taxableIncome <= 20000000) surcharge = taxAfterRebate * 0.15;
+      else if (taxableIncome <= 50000000) surcharge = taxAfterRebate * 0.25;
+      else surcharge = taxAfterRebate * 0.37;
     }
     
-    const taxBeforeCess = tax + surcharge;
+    const taxBeforeCess = taxAfterRebate + surcharge;
     const cess = taxBeforeCess * 0.04;
     const totalTax = Math.round(taxBeforeCess + cess);
     
@@ -275,12 +301,15 @@ const TaxCalculator = () => {
       chapter6Deductions,
       homeLoanDeduction,
       taxableIncome,
-      taxBeforeCess: Math.round(taxBeforeCess),
+      taxBeforeRebate: Math.round(taxBeforeRebate),
+      rebate87A: Math.round(rebate87A),
+      marginalRelief: Math.round(marginalRelief),
+      taxAfterRebate: Math.round(taxAfterRebate),
+      surcharge: Math.round(surcharge),
       cess: Math.round(cess),
       totalTax,
       effectiveRate: grossIncome > 0 ? (totalTax / grossIncome) * 100 : 0,
-      surcharge: Math.round(surcharge),
-      marginalRate: rebateApplied && totalTax === 0 ? 0 : marginalRate,
+      marginalRate: (rebate87A > 0 && totalTax === 0) ? 0 : marginalRate,
       slabBreakdown,
     };
   }, [inputs, calculateHRAExemption]);
@@ -342,22 +371,46 @@ const TaxCalculator = () => {
       marginalRate = 30;
     }
     
-    // Rebate u/s 87A (New Regime)
-    let rebateApplied = false;
-    if (inputs.residentialStatus === "resident" && taxableIncome <= 700000) {
-      tax = Math.max(0, tax - 25000);
-      rebateApplied = true;
+    // Store tax before any rebate
+    const taxBeforeRebate = tax;
+    
+    // Rebate u/s 87A (New Regime) - FY 2024-25
+    // For resident individuals with taxable income up to ₹7,00,000
+    // Full tax rebate up to ₹25,000 (effectively making income up to ₹7L tax-free)
+    let rebate87A = 0;
+    let marginalRelief = 0;
+    
+    if (inputs.residentialStatus === "resident") {
+      if (taxableIncome <= 700000) {
+        // Full rebate - entire tax is waived (up to ₹25,000)
+        rebate87A = Math.min(tax, 25000);
+        tax = Math.max(0, tax - rebate87A);
+      } else if (taxableIncome > 700000 && taxableIncome <= 750000) {
+        // Marginal Relief: Tax payable should not exceed income above ₹7L
+        const incomeAboveThreshold = taxableIncome - 700000;
+        const normalTax = tax;
+        // At ₹7L threshold, tax = ₹20,000 (3L-7L @ 5%) but fully rebated
+        const taxAtThreshold = 0; // Because of rebate
+        const marginalTax = taxAtThreshold + incomeAboveThreshold;
+        
+        if (normalTax > marginalTax) {
+          marginalRelief = normalTax - marginalTax;
+          tax = marginalTax;
+        }
+      }
     }
     
-    // Calculate Surcharge
+    const taxAfterRebate = tax;
+    
+    // Calculate Surcharge (applied after rebate)
     let surcharge = 0;
     if (taxableIncome > 5000000) {
-      if (taxableIncome <= 10000000) surcharge = tax * 0.10;
-      else if (taxableIncome <= 20000000) surcharge = tax * 0.15;
-      else surcharge = tax * 0.25;
+      if (taxableIncome <= 10000000) surcharge = taxAfterRebate * 0.10;
+      else if (taxableIncome <= 20000000) surcharge = taxAfterRebate * 0.15;
+      else surcharge = taxAfterRebate * 0.25;
     }
     
-    const taxBeforeCess = tax + surcharge;
+    const taxBeforeCess = taxAfterRebate + surcharge;
     const cess = taxBeforeCess * 0.04;
     const totalTax = Math.round(taxBeforeCess + cess);
     
@@ -368,12 +421,15 @@ const TaxCalculator = () => {
       chapter6Deductions: npsEmployer,
       homeLoanDeduction: 0,
       taxableIncome,
-      taxBeforeCess: Math.round(taxBeforeCess),
+      taxBeforeRebate: Math.round(taxBeforeRebate),
+      rebate87A: Math.round(rebate87A),
+      marginalRelief: Math.round(marginalRelief),
+      taxAfterRebate: Math.round(taxAfterRebate),
+      surcharge: Math.round(surcharge),
       cess: Math.round(cess),
       totalTax,
       effectiveRate: grossIncome > 0 ? (totalTax / grossIncome) * 100 : 0,
-      surcharge: Math.round(surcharge),
-      marginalRate: rebateApplied && totalTax === 0 ? 0 : marginalRate,
+      marginalRate: (rebate87A > 0 && totalTax === 0) ? 0 : marginalRate,
       slabBreakdown,
     };
   }, [inputs]);
@@ -517,6 +573,9 @@ OLD REGIME:
 - Chapter VI-A Deductions: ${formatCurrency(oldRegimeResult.chapter6Deductions)}
 - Home Loan Interest: ${formatCurrency(oldRegimeResult.homeLoanDeduction)}
 - Taxable Income: ${formatCurrency(oldRegimeResult.taxableIncome)}
+- Tax Before Rebate: ${formatCurrency(oldRegimeResult.taxBeforeRebate)}
+${oldRegimeResult.rebate87A > 0 ? `- Rebate u/s 87A: -${formatCurrency(oldRegimeResult.rebate87A)}` : ''}
+${oldRegimeResult.marginalRelief > 0 ? `- Marginal Relief: -${formatCurrency(oldRegimeResult.marginalRelief)}` : ''}
 - Total Tax: ${formatCurrency(oldRegimeResult.totalTax)}
 - Effective Rate: ${oldRegimeResult.effectiveRate.toFixed(2)}%
 
@@ -524,6 +583,9 @@ NEW REGIME:
 - Standard Deduction: ${formatCurrency(newRegimeResult.standardDeduction)}
 - NPS Employer: ${formatCurrency(newRegimeResult.chapter6Deductions)}
 - Taxable Income: ${formatCurrency(newRegimeResult.taxableIncome)}
+- Tax Before Rebate: ${formatCurrency(newRegimeResult.taxBeforeRebate)}
+${newRegimeResult.rebate87A > 0 ? `- Rebate u/s 87A: -${formatCurrency(newRegimeResult.rebate87A)}` : ''}
+${newRegimeResult.marginalRelief > 0 ? `- Marginal Relief: -${formatCurrency(newRegimeResult.marginalRelief)}` : ''}
 - Total Tax: ${formatCurrency(newRegimeResult.totalTax)}
 - Effective Rate: ${newRegimeResult.effectiveRate.toFixed(2)}%
 
@@ -1137,7 +1199,7 @@ Generated by Varnath Tax Calculator
                     </div>
                     
                     {/* Slab Breakdown */}
-                    {oldRegimeResult.slabBreakdown.length > 0 && oldRegimeResult.totalTax > 0 && (
+                    {oldRegimeResult.slabBreakdown.length > 0 && oldRegimeResult.taxBeforeRebate > 0 && (
                       <div className="mt-2 pt-2 border-t">
                         <p className="text-xs text-muted-foreground mb-2">Tax Slab Breakdown:</p>
                         {oldRegimeResult.slabBreakdown.filter(s => s.tax > 0).map((slab, idx) => (
@@ -1146,6 +1208,26 @@ Generated by Varnath Tax Calculator
                             <span>{formatCurrency(slab.tax)}</span>
                           </div>
                         ))}
+                        <div className="flex justify-between text-xs font-medium mt-1 pt-1 border-t border-dashed">
+                          <span>Tax Before Rebate</span>
+                          <span>{formatCurrency(oldRegimeResult.taxBeforeRebate)}</span>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Rebate u/s 87A */}
+                    {oldRegimeResult.rebate87A > 0 && (
+                      <div className="flex justify-between text-xs bg-green-50 dark:bg-green-950/30 p-1 rounded">
+                        <span className="text-green-700 dark:text-green-400 font-medium">Rebate u/s 87A</span>
+                        <span className="text-green-700 dark:text-green-400 font-medium">-{formatCurrency(oldRegimeResult.rebate87A)}</span>
+                      </div>
+                    )}
+                    
+                    {/* Marginal Relief */}
+                    {oldRegimeResult.marginalRelief > 0 && (
+                      <div className="flex justify-between text-xs bg-blue-50 dark:bg-blue-950/30 p-1 rounded">
+                        <span className="text-blue-700 dark:text-blue-400 font-medium">Marginal Relief</span>
+                        <span className="text-blue-700 dark:text-blue-400 font-medium">-{formatCurrency(oldRegimeResult.marginalRelief)}</span>
                       </div>
                     )}
                     
@@ -1201,7 +1283,7 @@ Generated by Varnath Tax Calculator
                     </div>
                     
                     {/* Slab Breakdown */}
-                    {newRegimeResult.slabBreakdown.length > 0 && newRegimeResult.totalTax > 0 && (
+                    {newRegimeResult.slabBreakdown.length > 0 && newRegimeResult.taxBeforeRebate > 0 && (
                       <div className="mt-2 pt-2 border-t">
                         <p className="text-xs text-muted-foreground mb-2">Tax Slab Breakdown:</p>
                         {newRegimeResult.slabBreakdown.filter(s => s.tax > 0).map((slab, idx) => (
@@ -1210,6 +1292,26 @@ Generated by Varnath Tax Calculator
                             <span>{formatCurrency(slab.tax)}</span>
                           </div>
                         ))}
+                        <div className="flex justify-between text-xs font-medium mt-1 pt-1 border-t border-dashed">
+                          <span>Tax Before Rebate</span>
+                          <span>{formatCurrency(newRegimeResult.taxBeforeRebate)}</span>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Rebate u/s 87A */}
+                    {newRegimeResult.rebate87A > 0 && (
+                      <div className="flex justify-between text-xs bg-green-50 dark:bg-green-950/30 p-1 rounded">
+                        <span className="text-green-700 dark:text-green-400 font-medium">Rebate u/s 87A</span>
+                        <span className="text-green-700 dark:text-green-400 font-medium">-{formatCurrency(newRegimeResult.rebate87A)}</span>
+                      </div>
+                    )}
+                    
+                    {/* Marginal Relief */}
+                    {newRegimeResult.marginalRelief > 0 && (
+                      <div className="flex justify-between text-xs bg-blue-50 dark:bg-blue-950/30 p-1 rounded">
+                        <span className="text-blue-700 dark:text-blue-400 font-medium">Marginal Relief</span>
+                        <span className="text-blue-700 dark:text-blue-400 font-medium">-{formatCurrency(newRegimeResult.marginalRelief)}</span>
                       </div>
                     )}
                     
