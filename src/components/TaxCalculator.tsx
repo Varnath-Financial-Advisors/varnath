@@ -397,11 +397,20 @@ const TaxCalculator = () => {
     const hra = parseNumber(inputs.hra);
     const rentPaid = parseNumber(inputs.actualRentPaid);
 
+    // Helper function to format currency for tips (annual only)
+    const formatTipAmount = (value: number) => {
+      return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        maximumFractionDigits: 0
+      }).format(value);
+    };
+
     if (section80C < 150000) {
       tips.push({
         title: "Maximize 80C Investments",
-        description: `You can invest ₹${formatCurrency(150000 - section80C)} more in PPF, ELSS, or Life Insurance`,
-        potential: `Save up to ₹${formatCurrency((150000 - section80C) * 0.3)}`,
+        description: `You can invest ${formatTipAmount(150000 - section80C)} more in PPF, ELSS, or Life Insurance`,
+        potential: `Save up to ${formatTipAmount((150000 - section80C) * 0.3)}`,
         icon: Landmark,
       });
     }
@@ -410,7 +419,7 @@ const TaxCalculator = () => {
       tips.push({
         title: "NPS Additional Contribution",
         description: "Invest in NPS under 80CCD(1B) for extra ₹50,000 deduction",
-        potential: `Save up to ₹${formatCurrency((50000 - section80CCD1B) * 0.3)}`,
+        potential: `Save up to ${formatTipAmount((50000 - section80CCD1B) * 0.3)}`,
         icon: GraduationCap,
       });
     }
