@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const StartupServices = () => {
-  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
+  const { ref: sectionRef, isVisible } = useScrollAnimation({ threshold: 0.05 });
 
   const services = [
     {
@@ -41,11 +41,13 @@ const StartupServices = () => {
   ];
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-background to-accent/30">
+    <section 
+      ref={sectionRef}
+      className="py-20 px-4 bg-gradient-to-b from-background to-accent/30"
+    >
       <div className="container mx-auto max-w-6xl">
         {/* Header */}
         <div 
-          ref={ref}
           className={`text-center mb-16 transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
@@ -69,10 +71,10 @@ const StartupServices = () => {
             return (
               <div
                 key={index}
-                ref={ref}
-                className={`transition-all duration-700 delay-${(index + 1) * 100}ms ${
+                className={`transition-all duration-700 ${
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
+                style={{ transitionDelay: isVisible ? `${(index + 1) * 100}ms` : "0ms" }}
               >
                 <Card className="h-full border border-border/50 hover:border-primary/50 hover:shadow-lg transition-all duration-300 group">
                   <CardHeader>
@@ -93,9 +95,12 @@ const StartupServices = () => {
         </div>
 
         {/* Why Choose Us for Startups */}
-        <div ref={ref} className={`bg-card border border-border/50 rounded-xl p-8 mb-12 transition-all duration-700 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}>
+        <div 
+          className={`bg-card border border-border/50 rounded-xl p-8 mb-12 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{ transitionDelay: isVisible ? "400ms" : "0ms" }}
+        >
           <h3 className="text-2xl font-bold text-foreground mb-6">Why Choose Varnath for Your Startup?</h3>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-4">
@@ -148,9 +153,12 @@ const StartupServices = () => {
         </div>
 
         {/* CTA Section */}
-        <div ref={ref} className={`text-center transition-all duration-700 ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}>
+        <div 
+          className={`text-center transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{ transitionDelay: isVisible ? "500ms" : "0ms" }}
+        >
           <h3 className="text-2xl font-bold text-foreground mb-4">Ready to Start Your Startup Journey?</h3>
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
             Let us handle the compliance and accounting while you focus on building your dream. Get a personalized consultation today.
