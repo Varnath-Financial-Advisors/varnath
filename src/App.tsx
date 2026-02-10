@@ -19,6 +19,7 @@ const lazyWithRetry = (importFn: () => Promise<any>) =>
 const Index = lazyWithRetry(() => import("./pages/Index"));
 const KnowledgeBase = lazyWithRetry(() => import("./pages/KnowledgeBase"));
 const ServicesPage = lazyWithRetry(() => import("./pages/ServicesPage"));
+const AboutUs = lazyWithRetry(() => import("./pages/AboutUs"));
 const NotFound = lazyWithRetry(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/knowledge-base" element={<KnowledgeBase />} />
             <Route path="/services" element={<ServicesPage />} />
+            <Route path="/about" element={<AboutUs />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
