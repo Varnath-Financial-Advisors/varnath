@@ -6,11 +6,20 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import WhatsAppButton from "./components/WhatsAppButton";
 
-// Lazy load pages for code splitting
-const Index = lazy(() => import("./pages/Index"));
-const KnowledgeBase = lazy(() => import("./pages/KnowledgeBase"));
-const ServicesPage = lazy(() => import("./pages/ServicesPage"));
-const NotFound = lazy(() => import("./pages/NotFound"));
+// Lazy load pages with retry logic for dynamic import failures
+const lazyWithRetry = (importFn: () => Promise<any>) =>
+  lazy(() =>
+    importFn().catch(() =>
+      new Promise((resolve) => {
+        setTimeout(() => resolve(importFn()), 1500);
+      })
+    )
+  );
+
+const Index = lazyWithRetry(() => import("./pages/Index"));
+const KnowledgeBase = lazyWithRetry(() => import("./pages/KnowledgeBase"));
+const ServicesPage = lazyWithRetry(() => import("./pages/ServicesPage"));
+const NotFound = lazyWithRetry(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
