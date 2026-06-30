@@ -39,7 +39,7 @@ const Hero = () => {
               </a>
             </Button>
             <Button size="lg" variant="outline" className="text-lg" asChild>
-              <a href="/knowledge-base">Explore Resources</a>
+              <a href={`${import.meta.env.BASE_URL}knowledge-base`}>Explore Resources</a>
             </Button>
           </div>
 

@@ -140,7 +140,7 @@ const KnowledgeBase = () => {
             </CardHeader>
             <CardContent>
               <a
-                href="/#contact"
+                href={`${import.meta.env.BASE_URL}#contact`}
                 className="inline-block bg-secondary text-secondary-foreground px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity"
               >
                 Schedule a Consultation

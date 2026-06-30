@@ -117,7 +117,7 @@ const AboutUs = () => {
                 className="text-lg px-8"
                 asChild
               >
-                <a href="/#contact">Book a Consultation</a>
+                <a href={`${import.meta.env.BASE_URL}#contact`}>Book a Consultation</a>
               </Button>
             </CardContent>
           </Card>

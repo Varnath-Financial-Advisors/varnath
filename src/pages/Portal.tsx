@@ -20,7 +20,7 @@ const Portal = () => {
   const cards = [
     { icon: FileText, title: "My Documents", desc: "Your shared reports and filings will appear here." },
     { icon: MessageSquare, title: "Messages", desc: "Direct updates from your advisor." },
-    { icon: Calculator, title: "Tax Calculator", desc: "Estimate your tax anytime.", href: "/#tax-calculator" },
+    { icon: Calculator, title: "Tax Calculator", desc: "Estimate your tax anytime.", href: `${import.meta.env.BASE_URL}#tax-calculator` },
   ];
 
   return (
