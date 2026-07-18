@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,24 @@ import logo from "@/assets/varnath-logo.png";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Scroll-aware header: gains shadow + solid background once the page scrolls
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 8);
+          ticking = false;
+        });
+      }
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -16,7 +34,11 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-sm border-b transition-all duration-200 ${
+        scrolled ? "bg-card/95 border-border shadow-md" : "bg-card/70 border-transparent"
+      }`}
+    >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center space-x-3">

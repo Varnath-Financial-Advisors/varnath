@@ -7,6 +7,12 @@ export interface Article {
   summary: string;
   topics: string[];
   content: string;
+  /** Date the figures in this article were last cross-checked against the source */
+  lastVerified?: string;
+  /** The circular / notification / Act the figures come from */
+  source?: string;
+  /** Financial year(s) the article applies to — shown as a chip on the article */
+  fyLabel?: string;
   downloadable?: {
     title: string;
     type: "pdf" | "checklist" | "template";
@@ -28,148 +34,304 @@ export const taxLaws: Category[] = [
     icon: React.createElement(FileText, { className: "w-8 h-8 text-primary" }),
     articles: [
       {
-        id: "income-tax-slabs-2024",
-        title: "Understanding Income Tax Slabs for FY 2024-25",
-        summary: "Learn about the new and old tax regimes, applicable tax rates, and choose the best option for your income level.",
-        topics: ["Tax Slabs", "New Tax Regime", "Old Tax Regime", "Surcharge", "Rebate u/s 87A"],
+        id: "income-tax-slabs-2025-26",
+        title: "Income Tax Slabs for FY 2025-26 & FY 2026-27",
+        summary: "The Finance Act 2025 slabs (unchanged by Budget 2026): new-regime rates, the ₹60,000 rebate that makes income up to ₹12.75 lakh tax-free, and when the old regime still wins.",
+        topics: ["Tax Slabs", "New Tax Regime", "Old Tax Regime", "Rebate u/s 87A", "Marginal Relief", "Surcharge"],
+        lastVerified: "18 July 2026",
+        source: "Finance Act, 2025; Budget 2026 (no slab change); cross-checked with the Income Tax Dept e-filing calculator",
+        fyLabel: "FY 2025-26 & FY 2026-27",
         content: `
-## Income Tax Slabs for FY 2024-25 (AY 2025-26)
+## What this means for you
 
-The Indian income tax system offers two regimes for individual taxpayers. The **New Tax Regime is the default** from FY 2023-24 onwards.
+If you're salaried with income up to **₹12.75 lakh**, you pay **zero tax** under the new regime — the ₹75,000 standard deduction plus the ₹60,000 rebate u/s 87A wipe out the liability. Above that, the new regime's wider slabs beat the old regime unless your deductions (HRA, 80C, home loan interest) exceed roughly ₹4.5–5 lakh a year. Budget 2026 changed nothing here — these rates hold for both FY 2025-26 and FY 2026-27.
 
 ---
 
-## New Tax Regime (Default) - Section 115BAC
+## New Tax Regime (Default) — Section 115BAC
 
-| Income Range | Tax Rate | Tax Amount (Max) |
-|--------------|----------|------------------|
-| Up to ₹3,00,000 | Nil | ₹0 |
-| ₹3,00,001 - ₹7,00,000 | 5% | ₹20,000 |
-| ₹7,00,001 - ₹10,00,000 | 10% | ₹30,000 |
-| ₹10,00,001 - ₹12,00,000 | 15% | ₹30,000 |
-| ₹12,00,001 - ₹15,00,000 | 20% | ₹60,000 |
-| Above ₹15,00,000 | 30% | As applicable |
+| Income Range | Tax Rate | Max Tax in Slab |
+|--------------|----------|-----------------|
+| Up to ₹4,00,000 | Nil | ₹0 |
+| ₹4,00,001 – ₹8,00,000 | 5% | ₹20,000 |
+| ₹8,00,001 – ₹12,00,000 | 10% | ₹40,000 |
+| ₹12,00,001 – ₹16,00,000 | 15% | ₹60,000 |
+| ₹16,00,001 – ₹20,00,000 | 20% | ₹80,000 |
+| ₹20,00,001 – ₹24,00,000 | 25% | ₹1,00,000 |
+| Above ₹24,00,000 | 30% | As applicable |
 
 ### New Regime Benefits
-- **Standard Deduction**: ₹75,000 (increased from ₹50,000)
-- **Rebate u/s 87A**: Full tax rebate if income ≤ ₹7,00,000
-- **Family Pension Deduction**: ₹25,000 (increased from ₹15,000)
+- **Standard Deduction**: ₹75,000 for salaried and pensioners
+- **Rebate u/s 87A**: up to ₹60,000 — full tax waiver if taxable income ≤ ₹12,00,000
+- **Effectively tax-free**: salary up to ₹12,75,000 (₹12L + ₹75K standard deduction)
+- **Same slabs for all ages** — no separate senior-citizen slabs in the new regime
+
+> **Watch out:** the 87A rebate does NOT cover tax on equity capital gains (STCG/LTCG) or lottery winnings. That tax is payable even if your total income is under ₹12 lakh. See our dedicated explainer on the 87A carve-out.
+
+### Marginal relief — income just above ₹12 lakh
+
+Without relief, earning ₹12,10,000 (taxable) would mean ₹61,500 tax — a ₹61,500 jump for ₹10,000 of extra income. Marginal relief caps your tax at the amount by which income exceeds ₹12 lakh:
+
+| Taxable Income | Slab Tax | Tax After Marginal Relief (before cess) |
+|----------------|----------|------------------------------------------|
+| ₹12,00,000 | ₹60,000 | ₹0 (rebate) |
+| ₹12,10,000 | ₹61,500 | ₹10,000 |
+| ₹12,50,000 | ₹67,500 | ₹50,000 |
+| ₹12,75,000 | ₹71,250 | ₹71,250 (relief exhausted) |
 
 ---
 
-## Old Tax Regime (Optional)
+## Old Tax Regime (by election — Form 10-IEA)
 
-| Income Range | Tax Rate | Tax Amount (Max) |
-|--------------|----------|------------------|
-| Up to ₹2,50,000 | Nil | ₹0 |
-| ₹2,50,001 - ₹5,00,000 | 5% | ₹12,500 |
-| ₹5,00,001 - ₹10,00,000 | 20% | ₹1,00,000 |
-| Above ₹10,00,000 | 30% | As applicable |
+| Income Range | Tax Rate |
+|--------------|----------|
+| Up to ₹2,50,000 | Nil |
+| ₹2,50,001 – ₹5,00,000 | 5% |
+| ₹5,00,001 – ₹10,00,000 | 20% |
+| Above ₹10,00,000 | 30% |
 
-### Old Regime Deductions Available
+### Higher basic exemption for resident senior citizens
+
+| Category | Age | Basic Exemption |
+|----------|-----|-----------------|
+| Regular Individual | Below 60 | ₹2,50,000 |
+| Senior Citizen | 60 – 80 | ₹3,00,000 |
+| Super Senior Citizen | Above 80 | ₹5,00,000 |
+
+### Old Regime — key figures
+- **Standard Deduction**: ₹50,000 (unchanged)
+- **Rebate u/s 87A**: up to ₹12,500, income ≤ ₹5,00,000
+
+### Old Regime Deductions (not available in new regime)
+
 | Section | Deduction | Maximum Limit |
 |---------|-----------|---------------|
-| 80C | PPF, ELSS, LIC, etc. | ₹1,50,000 |
-| 80CCD(1B) | NPS Additional | ₹50,000 |
-| 80D | Health Insurance | ₹25,000 - ₹1,00,000 |
-| 80E | Education Loan Interest | No limit |
-| 80G | Donations | 50% - 100% |
-| 80TTA | Savings Interest | ₹10,000 |
-| 24(b) | Home Loan Interest | ₹2,00,000 |
+| 80C | PPF, ELSS, LIC, EPF, tuition, home-loan principal | ₹1,50,000 |
+| 80CCD(1B) | NPS (additional) | ₹50,000 |
+| 80D | Health insurance | ₹25,000 – ₹1,00,000 |
+| 80E | Education loan interest | No limit |
+| 80G | Donations | 50% – 100% |
+| 80TTA / 80TTB | Savings / deposit interest | ₹10,000 / ₹50,000 (seniors) |
+| 24(b) | Home loan interest (self-occupied) | ₹2,00,000 |
 | HRA | House Rent Allowance | As per rules |
 
 ---
 
-## Surcharge Rates (Both Regimes)
+## Worked example — ₹10,00,000 salary
+
+**New regime:** ₹10,00,000 − ₹75,000 standard deduction = ₹9,25,000 taxable.
+Tax: ₹20,000 (4–8L @ 5%) + ₹12,500 (8–9.25L @ 10%) = ₹32,500.
+Taxable income ≤ ₹12L → rebate u/s 87A wipes it out. **Tax payable: ₹0.**
+
+**Old regime (no deductions):** ₹10,00,000 − ₹50,000 = ₹9,50,000 taxable.
+Tax: ₹12,500 (2.5–5L @ 5%) + ₹90,000 (5–9.5L @ 20%) = ₹1,02,500 + 4% cess = **₹1,06,600.**
+
+**Old regime (80C ₹1.5L + 80D ₹25K):** taxable ₹7,75,000 → ₹12,500 + ₹55,000 = ₹67,500 + cess = **₹70,200.**
+
+Even with ₹1.75 lakh of deductions, the old regime costs ₹70,200 where the new regime costs nil — at this income the new regime wins decisively.
+
+---
+
+## Surcharge (income above ₹50 lakh)
 
 | Total Income | Old Regime | New Regime |
 |--------------|------------|------------|
-| ₹50 Lakhs - ₹1 Cr | 10% | 10% |
-| ₹1 Cr - ₹2 Cr | 15% | 15% |
-| ₹2 Cr - ₹5 Cr | 25% | 25% |
+| ₹50L – ₹1 Cr | 10% | 10% |
+| ₹1 Cr – ₹2 Cr | 15% | 15% |
+| ₹2 Cr – ₹5 Cr | 25% | 25% |
 | Above ₹5 Cr | 37% | 25% (capped) |
 
-**Note**: Surcharge on New Regime is capped at 25% even for income above ₹5 Cr.
-
----
+- Surcharge on tax on equity capital gains (111A/112A) is capped at **15%** in both regimes.
+- **Marginal relief** applies at every threshold: the extra tax + surcharge can never exceed the income above the threshold.
 
 ## Health & Education Cess
 
-| Component | Rate |
-|-----------|------|
-| Health & Education Cess | 4% on (Tax + Surcharge) |
+4% on (tax + surcharge), in both regimes.
 
 ---
 
-## Senior Citizen Benefits
+## New vs Old — quick comparison (salaried, no old-regime deductions)
 
-| Category | Age | Basic Exemption (Old Regime) |
-|----------|-----|------------------------------|
-| Regular Individual | Below 60 | ₹2,50,000 |
-| Senior Citizen | 60 - 80 | ₹3,00,000 |
-| Super Senior Citizen | Above 80 | ₹5,00,000 |
+| Gross Salary | New Regime Tax | Old Regime Tax | Better Option |
+|--------------|----------------|----------------|---------------|
+| ₹10,00,000 | ₹0 | ₹1,06,600 | New Regime |
+| ₹12,75,000 | ₹0 | ₹1,87,200 | New Regime |
+| ₹15,00,000 | ₹97,500 | ₹2,57,400 | New Regime |
+| ₹20,00,000 | ₹1,92,400 | ₹4,13,400 | New Regime |
+| ₹25,00,000 | ₹3,19,800 | ₹5,69,400 | New Regime |
 
-**Note**: In New Regime, basic exemption is ₹3,00,000 for all age groups.
+With substantial deductions (HRA + 80C + home loan interest totalling ₹4.5L+), the old regime can still win — run both in our calculator before choosing.
 
----
-
-## Tax Comparison: Old vs New Regime
-
-| Gross Income | New Regime Tax | Old Regime Tax* | Better Option |
-|--------------|----------------|-----------------|---------------|
-| ₹7,00,000 | ₹0 (Rebate) | ₹0 (with 80C) | Either |
-| ₹10,00,000 | ₹54,600 | ₹54,600 | Depends on deductions |
-| ₹12,00,000 | ₹83,200 | ₹93,600 | New Regime |
-| ₹15,00,000 | ₹1,45,600 | ₹1,56,000 | New Regime |
-| ₹20,00,000 | ₹2,49,600 | ₹2,49,600 | Depends on deductions |
-| ₹25,00,000 | ₹3,64,000 | ₹3,64,000 | Depends on deductions |
-
-*Old Regime tax calculated without any deductions. With deductions, Old Regime may be beneficial.
-
----
-
-## When to Choose Which Regime?
-
-### Choose New Regime If:
-- Your total deductions are less than ₹3-4 lakhs
-- You prefer simplicity with fewer compliance requirements
-- You have income mainly from salary with standard deduction
-- Your income is ≤ ₹7 lakhs (full rebate available)
-
-### Choose Old Regime If:
-- Your total deductions exceed ₹4-5 lakhs annually
-- You have significant HRA claims
-- You have home loan interest deductions
-- You make substantial 80C, 80D investments
-
----
-
-## Important Points to Remember
+## Choosing and switching
 
 | Point | Details |
 |-------|---------|
-| Default Regime | New Tax Regime (from FY 2023-24) |
-| Switch Option | Salaried: Every year; Business: Once in lifetime |
-| Form for Opting Out | Form 10-IEA (to choose Old Regime) |
-| Due Date for Form | Before filing ITR |
-| Rebate Limit (New) | Income up to ₹7,00,000 |
-| Rebate Limit (Old) | Income up to ₹5,00,000 |
+| Default Regime | New Tax Regime |
+| Switch Option | Salaried: every year; Business income: once in a lifetime |
+| Form for Opting Out | Form 10-IEA (to elect the Old Regime) |
+| Due Date | Before filing the ITR |
 
----
+## A note on "Tax Year" terminology
 
-## Quick Tax Calculator Formula
-
-**New Regime (Income > ₹15 Lakhs)**:
-\`Tax = ₹1,50,000 + 30% of (Income - ₹15,00,000) + 4% Cess\`
-
-**Old Regime (Income > ₹10 Lakhs)**:
-\`Tax = ₹1,12,500 + 30% of (Income - ₹10,00,000) + 4% Cess\`
+From 1 April 2026 the **Income-tax Act, 2025** replaces the 1961 Act. It drops the "Previous Year / Assessment Year" pairing for a single **"Tax Year"**. FY 2025-26 corresponds to AY 2026-27 under the old terminology; under the new Act, FY 2026-27 is simply Tax Year 2026-27. We keep both labels because AY remains in older forms, notices and search habits.
         `,
         downloadable: {
           title: "Tax Regime Comparison Calculator",
           type: "template",
           description: "Excel template to compare your tax liability under both regimes"
         }
+      },
+      {
+        id: "section-87a-special-rate-carveout",
+        title: "Section 87A Rebate: Why Capital Gains Stay Taxable Under ₹12 Lakh",
+        summary: "The ₹60,000 rebate does not apply to equity capital gains or lottery winnings — a common and costly point of confusion, clarified with worked examples.",
+        topics: ["Rebate u/s 87A", "LTCG", "STCG", "Section 111A", "Section 112A", "Lottery Winnings"],
+        lastVerified: "18 July 2026",
+        source: "Proviso to s.87A, Finance Act 2025; ss. 111A, 112A, 115BB, Income-tax Act",
+        fyLabel: "FY 2025-26 & FY 2026-27",
+        content: `
+## What this means for you
+
+Even if your total income is under ₹12 lakh, you will still pay tax on **capital gains from equity shares/equity mutual funds** and on **lottery or game-show winnings**. The Section 87A rebate only wipes out tax on income taxed at normal slab rates — special-rate income is carved out. Plan redemptions and expect TDS accordingly.
+
+---
+
+## The rule in one table
+
+| Income Type | Rate | 87A Rebate Applies? (New Regime) |
+|-------------|------|----------------------------------|
+| Salary, rent, interest, business (slab rates) | 0–30% slabs | Yes — up to ₹60,000 |
+| STCG on listed equity / equity MFs (s.111A) | 20% | **No** |
+| LTCG on listed equity / equity MFs (s.112A) | 12.5% above ₹1.25L | **No** |
+| Lottery, game shows, puzzles (s.115BB) | 30% flat | **No** |
+
+Under the **old regime**, the rebate (max ₹12,500, income ≤ ₹5L) can still offset STCG u/s 111A tax — but never LTCG u/s 112A tax (barred by s.112A itself).
+
+## Worked example 1 — salary + equity LTCG
+
+Salary ₹10,00,000 and LTCG on equity mutual funds ₹2,00,000 (new regime, FY 2025-26):
+
+| Step | Amount |
+|------|--------|
+| Salary after ₹75K standard deduction | ₹9,25,000 |
+| Slab tax on ₹9,25,000 | ₹32,500 |
+| Rebate u/s 87A (total income ≤ ₹12L) | −₹32,500 |
+| LTCG ₹2,00,000 − ₹1,25,000 exemption | ₹75,000 taxable |
+| Tax @ 12.5% | ₹9,375 |
+| Add 4% cess | ₹375 |
+| **Total payable** | **₹9,750** |
+
+The salary tax vanished; the LTCG tax did not.
+
+## Worked example 2 — gains push you past ₹12 lakh
+
+Salary ₹11,50,000 (taxable ₹10,75,000) plus STCG ₹1,50,000. Total income = ₹12,25,000 — **over the ₹12L limit**, so the ₹60,000 rebate is lost entirely. Marginal relief caps the slab tax at ₹25,000 (the excess over ₹12L), but the STCG tax of ₹30,000 @ 20% is payable in full: (₹25,000 + ₹30,000) + 4% cess = **₹57,200** — versus ₹0 if the same person had no capital gains.
+
+**Takeaway:** special-rate income can silently push your total income past ₹12 lakh and cost you the entire rebate on your salary tax too.
+
+## Practical planning points
+
+- The ₹1,25,000 LTCG exemption u/s 112A still applies before the 12.5% rate.
+- Residents can set an **unused basic exemption** (₹4L new regime) against equity capital gains — useful for retirees with no salary income.
+- Nothing shields lottery/game-show winnings: 30% flat, no basic exemption, no rebate, TDS u/s 194B at source.
+- Marginal relief protects slab-rate income just above ₹12L — it does not reduce special-rate tax.
+        `
+      },
+      {
+        id: "income-tax-act-2025",
+        title: "Income-tax Act 2025: What Actually Changes From 1 April 2026",
+        summary: "The 1961 Act is replaced — but this is a rewrite, not a rate change. What's genuinely different, what's just renumbered, and what 'Tax Year' means.",
+        topics: ["Income-tax Act 2025", "Tax Year", "Assessment Year", "Compliance"],
+        lastVerified: "18 July 2026",
+        source: "Income-tax Act, 2025 (effective 1 April 2026); Budget 2026",
+        fyLabel: "From FY 2026-27",
+        content: `
+## What this means for you
+
+Your tax **rates, deductions and due dates do not change** because of the new Act. The Income-tax Act, 2025 replaces the 1961 Act from 1 April 2026 as a plain-language rewrite: shorter sentences, tables instead of provisos, and a single "Tax Year" replacing the confusing Previous Year / Assessment Year pairing. Expect new section numbers on notices and forms — not new taxes.
+
+---
+
+## What stays the same
+
+| Area | Position |
+|------|----------|
+| Tax slabs & rates | Unchanged (Budget 2026 made no changes) |
+| New regime as default, old regime by election | Unchanged |
+| Deductions (80C-style benefits, standard deduction) | Carried over with new section numbers |
+| TDS/TCS framework | Carried over |
+| Filing obligations & broad due-date structure | Carried over |
+
+## What actually changes
+
+| Change | Detail |
+|--------|--------|
+| **"Tax Year"** | One term replaces "Previous Year" + "Assessment Year". FY 2026-27 is simply Tax Year 2026-27. |
+| **Renumbering** | Sections are renumbered and consolidated (the 1961 Act's 800+ sections come down substantially). Old references like "80C" map to new numbers — mapping tables are published by the department. |
+| **Simplified drafting** | Formulas and tables replace nested provisos and explanations — fewer interpretation disputes over language. |
+| **Digital-first administration** | Faceless assessment and digital processes are embedded in the Act's design rather than bolted on. |
+
+## Old vs new terminology
+
+| Old (1961 Act) | New (2025 Act) |
+|----------------|----------------|
+| Previous Year (FY 2026-27) | Tax Year 2026-27 |
+| Assessment Year (AY 2027-28) | — (concept merged into Tax Year) |
+
+## Don't overstate the disruption
+
+Most provisions carry over with the same substance. Where you'll feel it:
+- Notices and orders issued after 1 April 2026 cite **new section numbers**
+- ITR forms and utilities progressively adopt **Tax Year** labels
+- Old case law generally continues to apply where language is materially the same
+
+Our advice: update templates and engagement letters to cite both old and new section numbers during the transition year.
+        `
+      },
+      {
+        id: "stt-hike-fo-budget-2026",
+        title: "STT Hike on F&O (Budget 2026): New Rates From 1 April 2026",
+        summary: "Securities Transaction Tax on equity futures rises to 0.05% and on options to 0.15% of premium. What it costs traders per crore of turnover.",
+        topics: ["STT", "Futures & Options", "Budget 2026", "Capital Markets"],
+        lastVerified: "18 July 2026",
+        source: "Budget 2026 / Finance Act 2026 (as reported by NSE-member brokers and tax portals); effective 1 April 2026",
+        fyLabel: "FY 2026-27",
+        content: `
+## What this means for you
+
+If you trade F&O, your transaction cost went up from 1 April 2026: STT on **equity futures more than doubled to 0.05%** of traded value (from 0.02%) and on **equity options rose to 0.15%** of premium (from 0.1%). Delivery-based equity investing is untouched. High-frequency and thin-margin strategies feel this the most; occasional hedgers barely notice.
+
+---
+
+## Revised STT rates (effective 1 April 2026)
+
+| Instrument | Charged On | Old Rate | New Rate | Paid By |
+|------------|-----------|----------|----------|---------|
+| Equity futures (sale) | Traded price | 0.02% | 0.05% | Seller |
+| Equity options (sale) | Premium | 0.1% | 0.15% | Seller |
+| Options exercised | Settlement/intrinsic value | 0.125% | 0.15% | Buyer |
+| Equity delivery (buy & sell) | Traded value | 0.1% | 0.1% (unchanged) | Both |
+| Equity intraday (sale) | Traded value | 0.025% | 0.025% (unchanged) | Seller |
+
+## What it costs in rupees
+
+| Trade | STT Before | STT Now |
+|-------|-----------|---------|
+| Sell futures worth ₹1 crore | ₹2,000 | ₹5,000 |
+| Sell options premium of ₹1,00,000 | ₹100 | ₹150 |
+
+## Why the government did it
+
+- Cool speculative retail activity in derivatives (a stated SEBI/CBDT concern since 2024)
+- Improve parity between derivatives and cash-market taxation
+- Raise revenue without touching long-term investors
+
+## Points for traders
+
+- STT on F&O remains **deductible as a business expense** if you report F&O income as business income (the normal treatment).
+- Breakeven points rise — reprice strategies with the new cost per lot before FY 2026-27 positions.
+- Remember F&O income is **normal slab-rate income** (not capital gains) — the 87A rebate can apply to it, unlike equity capital gains.
+        `
       },
       {
         id: "tds-provisions",
@@ -338,20 +500,26 @@ If your total tax liability exceeds ₹10,000 in a financial year, you must pay 
       },
       {
         id: "gst-rates-hsn",
-        title: "Understanding GST Rates and HSN Codes",
-        summary: "Guide to applicable GST rates across different goods and services, and how to determine the correct HSN/SAC codes.",
-        topics: ["Tax Rates", "HSN Codes", "SAC Codes", "Exemptions"],
+        title: "GST Rates After the 2025 Rationalisation (GST 2.0) & HSN Codes",
+        summary: "The 56th GST Council collapsed the four-slab structure into 5% / 18% / 40% from 22 September 2025. Current rates and how to determine the correct HSN/SAC codes.",
+        topics: ["Tax Rates", "GST 2.0", "HSN Codes", "SAC Codes", "Exemptions"],
+        lastVerified: "18 July 2026",
+        source: "56th GST Council meeting; CBIC rate notifications effective 22-09-2025",
+        fyLabel: "From 22 Sep 2025",
         content: `
-## GST Rates and HSN/SAC Codes
+## What this means for you
 
-### GST Rate Structure
+Since 22 September 2025, GST has just **three main rates: 5%, 18% and 40%**. The old 12% and 28% slabs are gone — most 12% items moved down to 5%, and 28% items moved to 18% (or 40% for sin/luxury goods, which replaces 28% + cess). Re-check the rate on everything you sell or buy; invoices raised with the old rates after the switchover are a common audit finding.
+
+### GST Rate Structure (current)
 | Rate | Category |
 |------|----------|
-| 0% | Exempted goods (fresh food, healthcare) |
-| 5% | Essential items (packaged food, transport) |
-| 12% | Standard goods (processed food, computers) |
-| 18% | Standard rate (most goods and services) |
-| 28% | Luxury & sin goods (cars, tobacco, AC) |
+| 0% | Exempted (fresh food, healthcare, 33 lifesaving drugs, educational materials, certain dairy) |
+| 5% | Merit rate — daily essentials, packaged foods, agricultural goods, healthcare equipment (absorbed most old 12% items) |
+| 18% | Standard rate — most goods and services, electronics, cement, small cars, appliances |
+| 40% | Demerit rate — pan masala, aerated/caffeinated drinks, luxury vehicles (replaces 28% + compensation cess) |
+
+> **Transition note:** tobacco products and pan masala remain on the old 28% + cess structure until a separate notification (pending discharge of compensation-cess loan obligations).
 
 ### HSN Code Structure
 HSN (Harmonized System of Nomenclature) is used for goods:
@@ -416,7 +584,7 @@ Required for goods movement exceeding ₹50,000:
 - Part B: Transporter details
         `,
         downloadable: {
-          title: "GST Return Filing Calendar 2024-25",
+          title: "GST Return Filing Calendar 2026-27",
           type: "pdf",
           description: "Complete calendar with all GST due dates"
         }
@@ -456,9 +624,8 @@ ITC is NOT available on:
 | 5 | Claim only matched ITC |
 
 ### Rule 36(4) Restriction
-- Claim ITC only to the extent reflected in GSTR-2B
-- Additional 5% can be claimed on faith basis
-- Reconciliation is mandatory
+- ITC can be claimed **only to the extent reflected in GSTR-2B** — the earlier provisional/extra-percentage claim no longer exists (nil since 1 January 2022)
+- Monthly reconciliation with GSTR-2B is mandatory before filing GSTR-3B
         `,
         downloadable: {
           title: "ITC Reconciliation Template",
@@ -978,55 +1145,62 @@ Pricing of transactions between associated enterprises to ensure they're at arm'
       },
       {
         id: "annual-compliance",
-        title: "Annual Compliance Calendar 2024-25",
-        summary: "Complete annual compliance calendar covering Income Tax, GST, MCA, and other regulatory filings.",
+        title: "Annual Compliance Calendar 2026-27",
+        summary: "Complete annual compliance calendar for the FY 2026-27 filing cycle covering Income Tax, GST, MCA, and other regulatory filings.",
         topics: ["ITR Filing", "GST Annual", "MCA Forms", "Audit Deadlines"],
+        lastVerified: "18 July 2026",
+        source: "Standard statutory due dates under the Income-tax law, CGST Act and Companies Act; check CBDT/CBIC/MCA circulars for year-specific extensions",
+        fyLabel: "Filing year 2026-27",
         content: `
-## Annual Compliance Calendar 2024-25
+## What this means for you
 
-### April 2025
+These are the recurring statutory deadlines for the 2026-27 filing cycle (returns for FY 2025-26 and payments for FY 2026-27). From 1 April 2026 filings are governed by the **Income-tax Act, 2025** — due-date structure carries over, but watch CBDT notifications for year-specific extensions before relying on any date near a deadline.
+
+## Annual Compliance Calendar 2026-27
+
+### April 2026
 - 30th: GSTR-4 Annual (Composition)
-- 30th: ITR for audit cases (extended)
 
-### May 2025
+### May 2026
 - 31st: TDS Q4 return (Form 24Q, 26Q)
 - 31st: Form 61A (SFT)
 
-### June 2025
+### June 2026
 - 15th: Advance tax - 1st installment
 
-### July 2025
+### July 2026
 - 15th: TCS Q1 return
-- 31st: ITR (non-audit cases)
+- 31st: ITR for FY 2025-26 (non-audit cases)
 - 31st: TDS Q1 return
 
-### September 2025
+### September 2026
 - 15th: Advance tax - 2nd installment
-- 30th: ITR (audit cases)
+- 30th: Tax audit report (FY 2025-26)
 - 30th: DIR-3 KYC
 
-### October 2025
+### October 2026
 - 15th: TCS Q2 return
+- 31st: ITR (audit cases, FY 2025-26)
 - 31st: TDS Q2 return
-- 31st: AOC-4 filing
+- 30th: AOC-4 filing (within 30 days of AGM)
 
-### November 2025
-- 30th: MGT-7 filing (typically)
+### November 2026
+- 29th: MGT-7 filing (within 60 days of AGM — typically)
 
-### December 2025
+### December 2026
 - 15th: Advance tax - 3rd installment
-- 31st: GSTR-9, GSTR-9C
+- 31st: GSTR-9, GSTR-9C (FY 2025-26)
 
-### January 2026
+### January 2027
 - 15th: TCS Q3 return
 - 31st: TDS Q3 return
 
-### March 2026
+### March 2027
 - 15th: Advance tax - 4th installment
 - 31st: Financial year closing
         `,
         downloadable: {
-          title: "FY 2024-25 Compliance Calendar",
+          title: "FY 2026-27 Compliance Calendar",
           type: "pdf",
           description: "Printable annual compliance calendar"
         }

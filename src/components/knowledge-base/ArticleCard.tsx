@@ -48,6 +48,12 @@ const ArticleCard = ({ article, onClick }: ArticleCardProps) => {
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <Clock className="w-3 h-3" />
             <span>{readingTime} min read</span>
+            {article.lastVerified && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span className="text-primary/80">Verified {article.lastVerified}</span>
+              </>
+            )}
           </div>
           {hasTables && (
             <Badge variant="outline" className="text-xs bg-accent/20 border-accent">

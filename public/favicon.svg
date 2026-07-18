@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#16294a"/>
+  <!-- V -->
+  <path d="M12 16 L24 16 L32 42 L40 16 L52 16 L38 52 L26 52 Z" fill="#ffffff"/>
+  <!-- upward arrow accent -->
+  <path d="M14 46 C24 40 38 30 48 20 L44 19 L54 12 L53 24 L49 21 C40 31 27 42 16 49 Z" fill="#2fa3e0"/>
+</svg>

@@ -7,6 +7,9 @@ import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 import TableOfContents from "./TableOfContents";
 import KeyTakeaways from "./KeyTakeaways";
+import ReadingProgress from "./ReadingProgress";
+import { withGlossary } from "./GlossaryText";
+import { ShieldCheck } from "lucide-react";
 
 interface ArticleDetailProps {
   article: Article;
@@ -57,10 +60,11 @@ const ArticleDetail = ({ article, categoryName, onBack }: ArticleDetailProps) =>
 
   return (
     <div className="max-w-4xl mx-auto">
+      <ReadingProgress />
       <Button
         variant="ghost"
         onClick={onBack}
-        className="mb-6 hover:bg-primary/10"
+        className="mb-6 hover:bg-primary/10 no-print"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         Back to Knowledge Base
@@ -82,11 +86,29 @@ const ArticleDetail = ({ article, categoryName, onBack }: ArticleDetailProps) =>
               <span>{Math.round(tableCount)} tables</span>
             </div>
           )}
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <Calendar className="w-4 h-4" />
-            <span>FY 2024-25</span>
-          </div>
+          {article.fyLabel && (
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <Calendar className="w-4 h-4" />
+              <span>{article.fyLabel}</span>
+            </div>
+          )}
         </div>
+
+        {/* Verification stamp — date + source so staleness is visible at a glance */}
+        {article.lastVerified ? (
+          <div className="flex items-start gap-2 text-xs text-muted-foreground bg-primary/5 border border-primary/15 rounded-lg px-3 py-2 mb-4">
+            <ShieldCheck className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+            <span>
+              <strong className="text-foreground">Last verified: {article.lastVerified}.</strong>{" "}
+              {article.source && <>Source: {article.source}</>}
+            </span>
+          </div>
+        ) : (
+          <div className="text-xs text-muted-foreground bg-muted/40 border border-border rounded-lg px-3 py-2 mb-4">
+            General guidance — figures not yet re-verified for the current financial year.
+            Confirm year-specific rates and due dates with us before acting.
+          </div>
+        )}
 
         <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
           {article.title}
@@ -202,7 +224,7 @@ const ArticleDetail = ({ article, categoryName, onBack }: ArticleDetailProps) =>
                 );
               },
               p: ({ children }) => (
-                <p className="mb-4 text-muted-foreground leading-relaxed">{children}</p>
+                <p className="mb-4 text-muted-foreground leading-relaxed">{withGlossary(children)}</p>
               ),
               ul: ({ children }) => (
                 <ul className="list-none pl-0 mb-4 space-y-2">{children}</ul>
@@ -213,7 +235,7 @@ const ArticleDetail = ({ article, categoryName, onBack }: ArticleDetailProps) =>
               li: ({ children }) => (
                 <li className="text-muted-foreground leading-relaxed flex items-start gap-2">
                   <span className="text-primary mt-1.5 shrink-0">•</span>
-                  <span>{children}</span>
+                  <span>{withGlossary(children)}</span>
                 </li>
               ),
               strong: ({ children }) => (
